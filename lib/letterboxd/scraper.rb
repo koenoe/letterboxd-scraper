@@ -32,15 +32,35 @@ module Letterboxd
 
     def self.fetch_film(slug)
       doc = fetch("/film/#{slug}")
-      tmdb_id = doc.at_css('body').attribute('data-tmdb-id').value
+      tmdb_id = doc.at_css('body').attribute('data-tmdb-id').value.to_i
       title = doc.at_css('#featured-film-header .film-title').text
+      release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year').value.to_i
       director = doc.at_css('#featured-film-header p > a').text
+      trailer = doc.at_css('#trailer-zoom').attribute('href').value
 
+      # Availability
+      doc = fetch("/esi/film/#{slug}/availability/?esiAllowUser=true")
+      itunes = true unless doc.at_css('#source-itunes').nil?
+      amazon = true unless doc.at_css('#source-amazon').nil?
+
+      node_disc = doc.css('#source-amazon a')
+      disc = true unless node_disc.nil? || node_disc.last.nil? || node_disc.last.text != 'Buy on Disc'
+
+      # View count
+      doc = fetch("/esi/film/#{slug}/sidebar-viewings/?esiAllowUser=true")
+      views_string = doc.at_css('.small-watched a').text
+      views = views_string.split('&nbsp;').first.gsub!(',','').to_i
+
+      # Put everything in our model
       Letterboxd::Film.new({
         title: title,
         slug: slug,
         tmdb_id: tmdb_id,
-        director: director
+        release_year: release_year,
+        director: director,
+        trailer: trailer,
+        availability: { itunes: itunes, amazon: amazon, disc: disc },
+        views: views
       })
     end
   end
