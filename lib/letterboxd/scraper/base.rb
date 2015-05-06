@@ -1,6 +1,5 @@
 require 'open-uri'
 require 'nokogiri'
-require 'letterboxd/models/film'
 
 module Letterboxd
   module Scraper
@@ -53,7 +52,7 @@ module Letterboxd
           node_title = node.attribute('data-film-name')
           node_title = node.at_css('img').attribute('alt') if node_title.nil?
 
-          items << Letterboxd::Film.new({title: node_title.value, slug: strip_slug(node_slug.value)})
+          items << {title: node_title.value, slug: strip_slug(node_slug.value)}
         end
         items
       end

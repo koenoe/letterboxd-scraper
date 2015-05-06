@@ -51,8 +51,8 @@ module Letterboxd
       views_string = doc.at_css('.small-watched a').text
       views = views_string.split('&nbsp;').first.gsub!(',','').to_i
 
-      # Put everything in our model
-      Letterboxd::Film.new({
+      # Put everything in a hash
+      {
         title: title,
         slug: slug,
         tmdb_id: tmdb_id,
@@ -61,7 +61,7 @@ module Letterboxd
         trailer: trailer,
         availability: { itunes: itunes, amazon: amazon, disc: disc },
         views: views
-      })
+      }
     end
   end
 end
