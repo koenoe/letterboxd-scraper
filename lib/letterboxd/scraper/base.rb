@@ -1,3 +1,4 @@
+require 'open-uri'
 require 'nokogiri'
 require 'letterboxd/models/film'
 
@@ -10,7 +11,7 @@ module Letterboxd
       end
 
       def fetch(url)
-        Nokogiri::HTML(open(base_url + url, { "Host" => "letterboxd.com" }))
+        Nokogiri::HTML(open(base_url + url, "Host" => "letterboxd.com" ))
       end
 
       def fetch_films(url, number_of_pages_limit = nil)
