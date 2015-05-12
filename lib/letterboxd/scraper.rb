@@ -63,5 +63,13 @@ module Letterboxd
         views: views
       }
     end
+
+    def self.fetch_following(username)
+      fetch_users("/#{username}/following")
+    end
+
+    def self.fetch_followers(username)
+      fetch_users("/#{username}/followers")
+    end
   end
 end

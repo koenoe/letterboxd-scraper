@@ -10,6 +10,7 @@ module Letterboxd
       end
 
       def fetch(url)
+        puts "Fetching #{url} ..."
         Nokogiri::HTML(open(base_url + url, "Host" => "letterboxd.com" ))
       end
 
@@ -27,6 +28,25 @@ module Letterboxd
           films << parse_films(doc)
         end
         films.flatten
+      end
+
+      def fetch_users(url)
+        doc = fetch("#{url}")
+
+        next_page_available = true
+        users = []
+        i = 1
+
+        while next_page_available do
+          doc = fetch("#{url}/page/#{i}")
+          new_users = parse_users(doc)
+          users << new_users
+          i += 1
+
+          next_page_available = false unless new_users.size > 0
+        end
+
+        users.flatten
       end
 
       def strip_slug(slug)
@@ -55,6 +75,16 @@ module Letterboxd
           items << {title: node_title.value, slug: strip_slug(node_slug.value)}
         end
         items
+      end
+
+      def parse_users(doc)
+        items = []
+
+        list = doc.css('.person-table .table-person h3 > a')
+        list.each do |node|
+          items << {name: node.text, username: strip_slug(node.attribute('href').value)}
+        end
+        items.flatten
       end
 
     end
