@@ -37,6 +37,8 @@ module Letterboxd
       release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year').value.to_i
       director = doc.at_css('#featured-film-header p > a').text
       trailer = doc.at_css('#trailer-zoom').attribute('href').value
+      average_rating = doc.at_css('meta[itemprop="average"]').attribute('content').value
+      vote_count = doc.at_css('meta[itemprop="votes"]').attribute('content').value
 
       # Availability
       doc = fetch("/esi/film/#{slug}/availability/?esiAllowUser=true")
@@ -60,7 +62,9 @@ module Letterboxd
         director: director,
         trailer: trailer,
         availability: { itunes: itunes, amazon: amazon, disc: disc },
-        views: views
+        views: views,
+        average_rating: average_rating,
+        vote_count: vote_count
       }
     end
 
