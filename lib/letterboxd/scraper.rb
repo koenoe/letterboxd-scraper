@@ -44,6 +44,7 @@ module Letterboxd
       doc = fetch("/esi/film/#{slug}/availability/?esiAllowUser=true")
       itunes = true unless doc.at_css('#source-itunes').nil?
       amazon = true unless doc.at_css('#source-amazon').nil?
+      netflix = true unless doc.at_css('#source-netflix').nil?
 
       node_disc = doc.css('#source-amazon a')
       disc = true unless node_disc.nil? || node_disc.last.nil? || node_disc.last.text != 'Buy on Disc'
@@ -61,7 +62,7 @@ module Letterboxd
         release_year: release_year,
         director: director,
         trailer: trailer,
-        availability: { itunes: itunes, amazon: amazon, disc: disc },
+        availability: { itunes: itunes, amazon: amazon, disc: disc, netflix: netflix },
         views: views,
         average_rating: average_rating,
         vote_count: vote_count
