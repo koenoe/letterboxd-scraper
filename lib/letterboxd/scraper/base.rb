@@ -82,7 +82,7 @@ module Letterboxd
 
         list = doc.css('.person-table .table-person h3 > a')
         list.each do |node|
-          items << {name: node.text, username: strip_slug(node.attribute('href').value)}
+          items << {name: node.text.to_s.squish, username: strip_slug(node.attribute('href').value)}
         end
         items.flatten
       end
