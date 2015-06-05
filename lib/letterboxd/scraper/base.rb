@@ -12,7 +12,18 @@ module Letterboxd
       def fetch(url)
         puts "Fetching #{url} ..."
         sleep(0.25)
-        Nokogiri::HTML(open(base_url + url, "Host" => "letterboxd.com" ))
+        doc = nil
+        begin
+          uri = open(base_url + url, "Host" => "letterboxd.com" )
+          begin
+            doc = Nokogiri::HTML(uri)
+          rescue Exception => e
+            puts "Error parsing document: #{e.message}"
+          end
+        rescue Exception => e
+          puts "Error opening url: #{e.message}"
+        end
+        doc
       end
 
       def fetch_films(url, number_of_pages_limit = nil)
