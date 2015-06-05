@@ -35,7 +35,8 @@ module Letterboxd
       tmdb_id = doc.at_css('body').attribute('data-tmdb-id').value.to_i
       title = doc.at_css('#featured-film-header .film-title').text
       release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year').value.to_i
-      director = doc.at_css('#featured-film-header p > a').text
+      director_node = doc.at_css('#featured-film-header p > a')
+      director = director_node.text unless director_node.nil?
       trailer_node = doc.at_css('#trailer-zoom')
       trailer = trailer_node.attribute('href').value unless trailer_node.nil?
 
