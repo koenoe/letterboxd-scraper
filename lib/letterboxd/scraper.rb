@@ -36,7 +36,8 @@ module Letterboxd
       title = doc.at_css('#featured-film-header .film-title').text
       release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year').value.to_i
       director = doc.at_css('#featured-film-header p > a').text
-      trailer = doc.at_css('#trailer-zoom').attribute('href').value
+      trailer_node = doc.at_css('#trailer-zoom')
+      trailer = trailer_node.attribute('href').value unless trailer_node.nil?
 
       average_rating_node = doc.at_css('meta[itemprop="average"]')
       average_rating = average_rating_node.attribute('content').value unless average_rating_node.nil?
@@ -52,11 +53,6 @@ module Letterboxd
       node_disc = doc.css('#source-amazon a')
       disc = true unless node_disc.nil? || node_disc.last.nil? || node_disc.last.text != 'Buy on Disc'
 
-      # View count
-      doc = fetch("/esi/film/#{slug}/sidebar-viewings/?esiAllowUser=true")
-      views_string = doc.at_css('.small-watched a').text
-      views = views_string.split('&nbsp;').first.gsub!(',','').to_i
-
       # Put everything in a hash
       {
         title: title,
@@ -66,7 +62,6 @@ module Letterboxd
         director: director,
         trailer: trailer,
         availability: { itunes: itunes, amazon: amazon, disc: disc, netflix: netflix },
-        views: views,
         average_rating: average_rating,
         vote_count: vote_count
       }
