@@ -11,8 +11,8 @@ module Letterboxd
 
       def fetch(url)
         puts "Fetching #{url} ..."
-        Nokogiri::HTML(open(base_url + url, "Host" => "letterboxd.com" ))
         sleep(0.25)
+        Nokogiri::HTML(open(base_url + url, "Host" => "letterboxd.com" ))
       end
 
       def fetch_films(url, number_of_pages_limit = nil)
