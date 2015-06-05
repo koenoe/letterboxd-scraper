@@ -38,10 +38,10 @@ module Letterboxd
       director = doc.at_css('#featured-film-header p > a').text
       trailer = doc.at_css('#trailer-zoom').attribute('href').value
 
-      average_rating_node = doc.at_css('meta[itemprop="average"]').attribute('content')
-      average_rating = average_rating_node.value unless average_rating_node.nil?
-      vote_count_node = doc.at_css('meta[itemprop="votes"]').attribute('content').value
-      vote_count = vote_count_node.value unless vote_count_node.nil?
+      average_rating_node = doc.at_css('meta[itemprop="average"]')
+      average_rating = average_rating_node.attribute('content').value unless average_rating_node.nil?
+      vote_count_node = doc.at_css('meta[itemprop="votes"]')
+      vote_count = vote_count_node.attribute('content').value unless vote_count_node.nil?
 
       # Availability
       doc = fetch("/esi/film/#{slug}/availability/?esiAllowUser=true")
