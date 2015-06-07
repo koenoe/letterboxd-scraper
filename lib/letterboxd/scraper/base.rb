@@ -19,9 +19,11 @@ module Letterboxd
             doc = Nokogiri::HTML(uri)
           rescue Exception => e
             puts "Error parsing document: #{e.message}"
+            doc = fetch(url)
           end
         rescue Exception => e
           puts "Error opening url: #{e.message}"
+          doc = fetch(url)
         end
         doc
       end
@@ -91,12 +93,15 @@ module Letterboxd
 
       def parse_users(doc)
         items = []
-
-        list = doc.css('.person-table .table-person h3 > a')
-        list.each do |node|
-          items << {name: strip_emoji(node.text.to_s.squish), username: strip_slug(node.attribute('href').value)}
+        begin
+          list = doc.css('.person-table .table-person h3 > a')
+          list.each do |node|
+            items << {name: strip_emoji(node.text.to_s.squish), username: strip_slug(node.attribute('href').value)}
+          end
+          items.flatten
+        rescue Exception => e
+          puts "Error parsing users: #{e.message}"
         end
-        items.flatten
       end
 
       protected
