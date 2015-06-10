@@ -68,12 +68,12 @@ module Letterboxd
       }
     end
 
-    def self.fetch_following(username)
-      fetch_users("/#{username}/following")
+    def self.fetch_following(username, pages = 100)
+      fetch_users("/#{username}/following", pages)
     end
 
-    def self.fetch_followers(username)
-      fetch_users("/#{username}/followers")
+    def self.fetch_followers(username, pages = 100)
+      fetch_users("/#{username}/followers", pages)
     end
   end
 end

@@ -11,10 +11,10 @@ module Letterboxd
 
       def fetch(url)
         puts "Fetching #{url} ..."
-        sleep(0.25)
+        sleep(0.05)
         doc = nil
         begin
-          uri = open(base_url + url, "Host" => "letterboxd.com" )
+          uri = open(base_url + url, "Host" => "letterboxd.com")
           begin
             doc = Nokogiri::HTML(uri)
           rescue Exception => e
@@ -23,7 +23,7 @@ module Letterboxd
           end
         rescue Exception => e
           puts "Error opening url: #{e.message}"
-          doc = fetch(url)
+          doc = fetch(url) if e.message != '403 Forbidden' && e.message != '404 Not Found'
         end
         doc
       end
@@ -44,7 +44,7 @@ module Letterboxd
         films.flatten
       end
 
-      def fetch_users(url)
+      def fetch_users(url, number_of_pages_limit = nil)
         doc = fetch("#{url}")
 
         next_page_available = true
@@ -52,6 +52,12 @@ module Letterboxd
         i = 1
 
         while next_page_available do
+
+          if number_of_pages_limit.present? && i >= number_of_pages_limit
+            next_page_available = false
+            break
+          end
+
           doc = fetch("#{url}/page/#{i}")
           new_users = parse_users(doc)
           users << new_users
