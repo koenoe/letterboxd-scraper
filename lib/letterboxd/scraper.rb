@@ -5,6 +5,10 @@ module Letterboxd
   module Scraper
     extend Letterboxd::Scraper::Base
 
+    def self.user_exist?(username)
+      url_exist?("/#{username}/")
+    end
+
     def self.fetch_seen(username)
       fetch_films("/#{username}/films")
     end
