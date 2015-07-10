@@ -31,6 +31,7 @@ module Letterboxd
         puts "Fetching #{url} ..."
         sleep(0.05)
         doc = nil
+        retries = 0
         begin
           uri = open(base_url + url, "Host" => "letterboxd.com")
           begin
@@ -41,7 +42,10 @@ module Letterboxd
           end
         rescue Exception => e
           puts "Error opening url: #{e.message}"
-          doc = fetch(url) if e.message != '403 Forbidden' && e.message != '404 Not Found'
+          if e.message != '403 Forbidden' && e.message != '404 Not Found'
+            doc = fetch(url)
+            retries = retries + 1
+          end
         end
         doc
       end

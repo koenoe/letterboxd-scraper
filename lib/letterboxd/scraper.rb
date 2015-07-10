@@ -36,9 +36,12 @@ module Letterboxd
 
     def self.fetch_film(slug)
       doc = fetch("/film/#{slug}")
-      tmdb_id = doc.at_css('body').attribute('data-tmdb-id').value.to_i
-      title = doc.at_css('#featured-film-header .film-title').text
-      release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year').value.to_i
+      tmdb_id = doc.at_css('body').attribute('data-tmdb-id')
+      tmdb_id = tmdb_id.value.to_i unless tmdb_id.nil?
+      title = doc.at_css('#featured-film-header .film-title')
+      title = title.text unless title.nil?
+      release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year')
+      release_year = release_year.value.to_i unless release_year.nil?
       director_node = doc.at_css('#featured-film-header p > a')
       director = director_node.text unless director_node.nil?
       trailer_node = doc.at_css('#trailer-zoom')
