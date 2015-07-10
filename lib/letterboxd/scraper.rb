@@ -50,7 +50,7 @@ module Letterboxd
       vote_count = vote_count_node.attribute('content').value unless vote_count_node.nil?
 
       # Availability
-      doc = fetch("/esi/film/#{slug}/availability/?esiAllowUser=true")
+      doc = fetch("/csi/film/#{slug}/availability/?esiAllowUser=true")
       itunes = true unless doc.at_css('#source-itunes').nil?
       amazon = true unless doc.at_css('#source-amazon').nil?
       netflix = true unless doc.at_css('#source-netflix').nil?
