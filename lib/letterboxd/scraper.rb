@@ -40,7 +40,8 @@ module Letterboxd
       tmdb_id = tmdb_id.value.to_i unless tmdb_id.nil?
       title = doc.at_css('#featured-film-header .film-title')
       title = title.text unless title.nil?
-      release_year = doc.at_css('#poster-col .film-poster').attribute('data-film-release-year')
+      release_year = doc.at_css('#poster-col .film-poster')
+      release_year = release_year.attribute('data-film-release-year') unless release_year.nil?
       release_year = release_year.value.to_i unless release_year.nil?
       director_node = doc.at_css('#featured-film-header p > a')
       director = director_node.text unless director_node.nil?
