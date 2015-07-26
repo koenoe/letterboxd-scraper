@@ -13,7 +13,7 @@ module Letterboxd
       def url_exist?(url_string)
         url_string = base_url + url_string unless url_string.include? 'letterboxd.com'
         url = URI.parse(url_string)
-        puts url
+        # puts url
         req = Net::HTTP.new(url.host, url.port)
         req.use_ssl = (url.scheme == 'https')
         path = url.path unless url.path.nil?
@@ -28,7 +28,7 @@ module Letterboxd
       end
 
       def fetch(url)
-        puts "Fetching #{url} ..."
+        # puts "Fetching #{url} ..."
         sleep(0.05)
         doc = nil
         retries = 0
