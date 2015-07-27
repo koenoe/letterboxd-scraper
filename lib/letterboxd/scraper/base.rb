@@ -112,7 +112,8 @@ module Letterboxd
           node_slug = node.attribute('data-film-link') if node_slug.nil?
 
           node_title = node.attribute('data-film-name')
-          node_title = node.at_css('img').attribute('alt') if node_title.nil?
+          node_img = node.at_css('img') if node_title.nil?
+          node_title = node_image.attribute('alt') if node_img.present?
 
           items << {title: node_title.value, slug: strip_slug(node_slug.value)}
         end
